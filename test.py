@@ -39,6 +39,9 @@ class SolutionTest(unittest.TestCase):
         """
         del(self.friends_graph)
         del(self.stalkers_graph)
+        del(self.highest_stalker_people)
+        del(self.highest_stalker_friend)
+        del(self.highest_stalker_nonfriend)
 
     def test_read_friends_graph(self):
         """

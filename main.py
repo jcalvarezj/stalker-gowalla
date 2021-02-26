@@ -119,6 +119,7 @@ def read_stalkers_graph(checkins_file):
                         stalkers_graph.add_weight(visit[0], new_visit[0], location_id)
                 
                 visit_records[location_id].append(new_visit)
+            i += 1
 
     print('\tFinished building the Stalkers Graph')
     return stalkers_graph
@@ -130,13 +131,13 @@ def compute_most_stalking_people(data_folder, checkins_filename, edges_filename)
     for pairs of people who are friends to each other or not, as a tuple in that
     order
     """
-    print('Computing answers...')
-
     highest_friend_stalker = (None, 0)
     highest_nonfriend_stalker = (None, 0)
-    stalkers_graph = read_stalkers_graph(f'{data_folder}{checkins_filename}')
     friendship_graph = read_friendship_graph(f'{data_folder}{edges_filename}')
+    stalkers_graph = read_stalkers_graph(f'{data_folder}{checkins_filename}')
     stalking_dict = stalkers_graph.weights
+
+    print('Computing answers...')
 
     for pair_locations in stalking_dict.items():
         pair, locations = pair_locations

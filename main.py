@@ -73,6 +73,7 @@ def read_friendship_graph(friends_file):
     """
     Reads the edges (friendships) file and returns a graph with the associations
     """
+    print('\tBuilding the Friendship Graph...')
     friendship_graph = Graph()
 
     with open(friends_file) as edges:
@@ -82,6 +83,7 @@ def read_friendship_graph(friends_file):
             friend = int(friend.replace('\n', ''))
             friendship_graph.add_relation(user, friend)
 
+    print('\tFinished building the Friendship Graph')
     return friendship_graph
 
 
@@ -90,11 +92,16 @@ def read_stalkers_graph(checkins_file):
     Reads the check-ins file and returns a graph with the associations between people
     that mean stalking (weighted as a list of involved location ids)
     """
+    print('\tBuilding the Stalkers Graph')
     stalkers_graph = Graph()
     visit_records = {}
+    i = 0
 
     with open(checkins_file) as checkins:
         for line in checkins:
+            if i % 50000 == 0:
+                print(f'\t\tProcessed {i} check-in records')
+
             user_id, checkin_time, _, _, location_id = line.split('\t')
             user_id = int(user_id)
             checkin_time = checkin_time.replace('Z', '+00:00')
@@ -113,24 +120,25 @@ def read_stalkers_graph(checkins_file):
                 
                 visit_records[location_id].append(new_visit)
 
+    print('\tFinished building the Stalkers Graph')
     return stalkers_graph
 
 
 def compute_most_stalking_people(checkins_filename, edges_filename):
     """
-    Answers the second question by calculating which stalker pair has the highest score
-    for a pair of people who are not friends to each other
+    Answers the questions by calculating which stalker pair has the highest score
+    for pairs of people who are friends to each other or not, as a tuple in that
+    order
     """
+    print('Computing answers...')
+
     highest_friend_stalker = (None, 0)
     highest_nonfriend_stalker = (None, 0)
     stalkers_graph = read_stalkers_graph(f'{DATA_FOLDER}{checkins_filename}')
     friendship_graph = read_friendship_graph(f'{DATA_FOLDER}{edges_filename}')
     stalking_dict = stalkers_graph.weights
 
-    for i, pair_locations in enumerate(stalking_dict.items()):
-        if i % 50000 == 0:
-            print(f'Processed {i} records of stalking events')
-
+    for pair_locations in stalking_dict.items():
         pair, locations = pair_locations
         stalking_score = len(locations)
 
@@ -155,6 +163,8 @@ if __name__ == '__main__':
 
     extract_data_files(f'{EDGES_COMP_FILE}')
     extract_data_files(f'{CHECKINS_COMP_FILE}')
+
+    print('Starting analysis! This might take a while')
 
     start_time = timer()
     most_stalking_friend, most_stalking_nonfriend = compute_most_stalking_people(CHECKINS_FILE, EDGES_FILE)

@@ -58,7 +58,7 @@ class SolutionTest(unittest.TestCase):
         """
         Test for the compute_most_stalking_people() method
         """
-        computed_highest_stalker_people = compute_most_stalking_people(TEST_CHECKINS_FILE, TEST_EDGES_FILE)
+        computed_highest_stalker_people = compute_most_stalking_people(TEST_FOLDER, TEST_CHECKINS_FILE, TEST_EDGES_FILE)
         self.assertEqual(self.highest_stalker_people, computed_highest_stalker_people)
 
 

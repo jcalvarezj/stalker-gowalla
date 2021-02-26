@@ -64,7 +64,6 @@ def extract_data_files(filename):
     try:
         os.system(f'echo "Uncompressing {DATA_FOLDER}{filename}"')
         os.system(f'gzip -dkv {DATA_FOLDER}{filename}')
-        os.system(f'gzip -dkv {DATA_FOLDER}{filename}')
     except Exception as e:
         print(f'There was a problem when uncompressing the file {DATA_FOLDER}{filename}')
         print(e)
@@ -129,6 +128,9 @@ def compute_most_stalking_people(checkins_filename, edges_filename):
     stalking_dict = stalkers_graph.weights
 
     for i, pair_locations in enumerate(stalking_dict.items()):
+        if i % 50000 == 0:
+            print(f'Processed {i} records of stalking events')
+
         pair, locations = pair_locations
         stalking_score = len(locations)
 
@@ -142,8 +144,15 @@ def compute_most_stalking_people(checkins_filename, edges_filename):
 
 
 if __name__ == '__main__':
-    obtain_data_files(EDGES_URL)
-    obtain_data_files(CHECKINS_URL)
+    print('Do you want to download the datasets?')
+    print('1. Yes, please download them for me')
+    print('2. No, I\'ll add the *.gz files manually into ./data/')
+    option = input()
+
+    if option == '1':
+        obtain_data_files(EDGES_URL)
+        obtain_data_files(CHECKINS_URL)
+
     extract_data_files(f'{EDGES_COMP_FILE}')
     extract_data_files(f'{CHECKINS_COMP_FILE}')
 

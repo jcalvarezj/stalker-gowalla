@@ -151,7 +151,7 @@ if __name__ == '__main__':
     most_stalking_friend, most_stalking_nonfriend = compute_most_stalking_people(CHECKINS_FILE, EDGES_FILE)
     end_time = timer()
 
-    print(f'The process took {timedelta(seconds = end_time - start_time)} (HH:MM:SS)')
+    print(f'Finished! The process took {timedelta(seconds = end_time - start_time)} (HH:MM:SS)!\n')
 
     print('The most stalking pair of non-friends is')
     print(most_stalking_nonfriend)

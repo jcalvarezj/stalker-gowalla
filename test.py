@@ -29,8 +29,8 @@ class SolutionTest(unittest.TestCase):
         self.stalkers_graph.add_weight(2, 4, 3)
         self.stalkers_graph.add_weight(2, 1, 5)
 
-        highest_stalker_friend = ((1, 3), 1)
-        highest_stalker_nonfriend = ((1, 2), 2)
+        self.highest_stalker_friend = ((1, 3), 1)
+        self.highest_stalker_nonfriend = ((1, 2), 2)
         self.highest_stalker_people = highest_stalker_friend, highest_stalker_nonfriend
 
     def tearDown(self):

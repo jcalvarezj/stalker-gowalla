@@ -31,7 +31,7 @@ class SolutionTest(unittest.TestCase):
 
         self.highest_stalker_friend = ((1, 3), 1)
         self.highest_stalker_nonfriend = ((1, 2), 2)
-        self.highest_stalker_people = highest_stalker_friend, highest_stalker_nonfriend
+        self.highest_stalker_people = self.highest_stalker_friend, self.highest_stalker_nonfriend
 
     def tearDown(self):
         """
@@ -59,7 +59,7 @@ class SolutionTest(unittest.TestCase):
         Test for the compute_most_stalking_people() method
         """
         computed_highest_stalker_people = compute_most_stalking_people(TEST_CHECKINS_FILE, TEST_EDGES_FILE)
-        self.assertEqual(self.highest_stalker_friend, computed_highest_stalker_people)
+        self.assertEqual(self.highest_stalker_people, computed_highest_stalker_people)
 
 
 if __name__ == '__main__':

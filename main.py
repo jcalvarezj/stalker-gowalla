@@ -11,38 +11,45 @@ CHECKINS_COMP_FILE = 'loc-gowalla_totalCheckins.txt.gz'
 CHECKINS_FILE = 'loc-gowalla_totalCheckins.txt'
 
 
-class Graph:
+class FriendshipGraph:
     """
-    This class represents the relations between people
+    This class represents friendship associations between people
     """
     def __init__(self):
         """
         Constructor initializer
         """
         self.relations = {}
+
+    def add_relation(self, user_id, friend_id):
+        """
+        Adds a friendship association between two people
+        """
+        if not self.relations.get(user_id):
+            self.relations[user_id] = {friend_id}
+        else:
+            self.relations[user_id].add(friend_id)
+
+
+class StalkingGraph:
+    """
+    This class represents stalking associations between people
+    """
+    def __init__(self):
+        """
+        Constructor initializer
+        """
         self.weights = {}
 
-    def add_relation(self, start_node, end_node):
+    def add_weight(self, stalked_id, stalker_id, location_id):
         """
-        Adds a relation between two nodes
+        Adds a location for a pair (stalked, stalker)
         """
-        if not self.relations.get(start_node):
-            self.relations[start_node] = {end_node}
-        else:
-            self.relations[start_node].add(end_node)
-
-    def add_weight(self, start_node, end_node, weight):
-        """
-        Adds a weight for a couple of nodes' association
-        """
-        pair = start_node, end_node
+        pair = stalked_id, stalker_id
         if not self.weights.get(pair):
-            self.weights[pair] = {weight}
+            self.weights[pair] = {location_id}
         else:
-            self.weights[pair].add(weight)
-
-    def __str__(self):
-        return f'Graph with nodes:\n{self.relations}\nAnd weights:\n{self.weights}'
+            self.weights[pair].add(location_id)
 
 
 def obtain_data_files(url):
@@ -74,7 +81,7 @@ def read_friendship_graph(friends_file):
     Reads the edges (friendships) file and returns a graph with the associations
     """
     print('\tBuilding the Friendship Graph...')
-    friendship_graph = Graph()
+    friendship_graph = FriendshipGraph()
 
     with open(friends_file) as edges:
         for line in edges:
@@ -93,7 +100,7 @@ def read_stalkers_graph(checkins_file):
     that mean stalking (weighted as a list of involved location ids)
     """
     print('\tBuilding the Stalkers Graph')
-    stalkers_graph = Graph()
+    stalkers_graph = StalkingGraph()
     visit_records = {}
     i = 0
 

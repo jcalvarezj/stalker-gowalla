@@ -1,6 +1,6 @@
 import unittest
-from main import compute_most_stalking_people
-from main import Graph, read_friendship_graph, read_stalkers_graph
+from main import FriendshipGraph, StalkingGraph
+from main import read_friendship_graph, read_stalkers_graph, compute_most_stalking_people
 
 TEST_FOLDER = './test/'
 TEST_EDGES_FILE = 'edgestest.txt'
@@ -15,13 +15,13 @@ class SolutionTest(unittest.TestCase):
         """
         Unit test initialization
         """
-        self.friends_graph = Graph()
+        self.friends_graph = FriendshipGraph()
         self.friends_graph.add_relation(1, 3)
         self.friends_graph.add_relation(2, 4)
         self.friends_graph.add_relation(3, 1)
         self.friends_graph.add_relation(4, 2)
 
-        self.stalkers_graph = Graph()
+        self.stalkers_graph = StalkingGraph()
         self.stalkers_graph.add_weight(1, 2, 1)
         self.stalkers_graph.add_weight(1, 2, 6)
         self.stalkers_graph.add_weight(1, 3, 2)

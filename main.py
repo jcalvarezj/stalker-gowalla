@@ -120,10 +120,11 @@ def read_stalkers_graph(checkins_file):
                 visit_records[location_id] = [new_visit]
             else:
                 for visit in visit_records[location_id]:
-                    if new_visit[1] < visit[1]:
-                        stalkers_graph.add_weight(new_visit[0], visit[0], location_id)
-                    else:
-                        stalkers_graph.add_weight(visit[0], new_visit[0], location_id)
+                    if new_visit[0] != visit[0]:
+                        if new_visit[1] < visit[1]:
+                            stalkers_graph.add_weight(new_visit[0], visit[0], location_id)
+                        else:
+                            stalkers_graph.add_weight(visit[0], new_visit[0], location_id)
                 
                 visit_records[location_id].append(new_visit)
             i += 1

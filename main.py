@@ -1,13 +1,14 @@
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
+from timeit import default_timer as timer
 
-DATA_FOLDER = './test/'#'./data/'
+DATA_FOLDER = './data/'
 EDGES_URL = 'https://snap.stanford.edu/data/loc-gowalla_edges.txt.gz'
 EDGES_COMP_FILE = 'loc-gowalla_edges.txt.gz'
-EDGES_FILE = 'edgestest.txt'#'loc-gowalla_edges.txt'
+EDGES_FILE = 'loc-gowalla_edges.txt'
 CHECKINS_URL = 'https://snap.stanford.edu/data/loc-gowalla_totalCheckins.txt.gz'
 CHECKINS_COMP_FILE = 'loc-gowalla_totalCheckins.txt.gz'
-CHECKINS_FILE = 'checkinstest.txt'#'loc-gowalla_totalCheckins.txt'
+CHECKINS_FILE = 'loc-gowalla_totalCheckins.txt'
 
 
 class Graph:
@@ -61,11 +62,11 @@ def extract_data_files(filename):
     Uses Linux/Unix commands to extract the retrieved files
     """
     try:
-        os.system(f'echo "Uncompressing {filename}"')
-        os.system(f'gzip -dkv {filename}')
-        os.system(f'gzip -dkv {filename}')
+        os.system(f'echo "Uncompressing {DATA_FOLDER}{filename}"')
+        os.system(f'gzip -dkv {DATA_FOLDER}{filename}')
+        os.system(f'gzip -dkv {DATA_FOLDER}{filename}')
     except Exception as e:
-        print(f'There was a problem when uncompressing the file {filename}')
+        print(f'There was a problem when uncompressing the file {DATA_FOLDER}{filename}')
         print(e)
 
 
@@ -116,15 +117,15 @@ def read_stalkers_graph(checkins_file):
     return stalkers_graph
 
 
-def compute_most_stalking_people():
+def compute_most_stalking_people(checkins_filename, edges_filename):
     """
     Answers the second question by calculating which stalker pair has the highest score
     for a pair of people who are not friends to each other
     """
     highest_friend_stalker = (None, 0)
     highest_nonfriend_stalker = (None, 0)
-    stalkers_graph = read_stalkers_graph(f'{DATA_FOLDER}{CHECKINS_FILE}')
-    friendship_graph = read_friendship_graph(f'{DATA_FOLDER}{EDGES_FILE}')
+    stalkers_graph = read_stalkers_graph(f'{DATA_FOLDER}{checkins_filename}')
+    friendship_graph = read_friendship_graph(f'{DATA_FOLDER}{edges_filename}')
     stalking_dict = stalkers_graph.weights
 
     for i, pair_locations in enumerate(stalking_dict.items()):
@@ -141,11 +142,17 @@ def compute_most_stalking_people():
 
 
 if __name__ == '__main__':
-    #obtain_data_files(EDGES_URL)
-    #obtain_data_files(CHECKINS_URL)
-    #extract_data_files(f'{DATA_FOLDER}{EDGES_COMP_FILE}')
-    #extract_data_files(f'{DATA_FOLDER}{CHECKINS_COMP_FILE}')
-    most_stalking_friend, most_stalking_nonfriend = compute_most_stalking_people()
+    obtain_data_files(EDGES_URL)
+    obtain_data_files(CHECKINS_URL)
+    extract_data_files(f'{EDGES_COMP_FILE}')
+    extract_data_files(f'{CHECKINS_COMP_FILE}')
+
+    start_time = timer()
+    most_stalking_friend, most_stalking_nonfriend = compute_most_stalking_people(CHECKINS_FILE, EDGES_FILE)
+    end_time = timer()
+
+    print(f'The process took {timedelta(seconds = end_time - start_time)} (HH:MM:SS)')
+
     print('The most stalking pair of non-friends is')
     print(most_stalking_nonfriend)
     print('The most stalking pair of non-friends is')

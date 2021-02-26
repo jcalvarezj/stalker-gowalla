@@ -1,6 +1,6 @@
 import unittest
+from main import compute_most_stalking_people
 from main import Graph, read_friendship_graph, read_stalkers_graph
-from main import compute_most_stalking_people, CHECKINS_FILE, EDGES_FILE
 
 TEST_FOLDER = './test/'
 TEST_EDGES_FILE = 'edgestest.txt'
@@ -58,7 +58,7 @@ class SolutionTest(unittest.TestCase):
         """
         Test for the compute_most_stalking_people() method
         """
-        computed_highest_stalker_people = compute_most_stalking_people(CHECKINS_FILE, EDGES_FILE)
+        computed_highest_stalker_people = compute_most_stalking_people(TEST_CHECKINS_FILE, TEST_EDGES_FILE)
         self.assertEqual(self.highest_stalker_friend, computed_highest_stalker_people)
 
 
